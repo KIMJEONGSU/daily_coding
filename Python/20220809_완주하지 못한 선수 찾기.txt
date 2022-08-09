@@ -1,0 +1,51 @@
+#----------------------------------내가 푼 코드
+def solution(participant, completion):
+    answer = ''
+   
+    for i in participant:
+	if i not in completion:
+		answer+=i
+	else:
+		pass
+               
+    return answer
+
+문제점 : 동명이인있을 경우에 처리못함.
+#----------------------------------코드1
+리스트는 뺄셈 불가, 딕셔너리 뺄셈 가능
+def solution(participant, completion):
+    answer = ''
+    p_dict={}
+    c_dict={}
+    
+    for i in participant:
+        if i not in p_dict:
+            p_dict[i]=0
+        p_dict[i]+=1
+        
+    for i in completion:
+        if i not in c_dict:
+            c_dict[i]=0
+        c_dict[i]+=1
+    
+    p=p_dict.items()
+    c=c_dict.items()
+    
+    answer=list(dict(p-c).keys())[0]
+               
+    return answer
+#----------------------------------코드2 (다른사람의 풀이)
+import collections
+
+
+def solution(participant, completion):
+    answer = collections.Counter(participant) - collections.Counter(completion)
+    return list(answer.keys())[0]
+#----------------------------------코드3 (다른사람의 풀이)
+def solution(participant, completion):
+    participant.sort()
+    completion.sort()
+    
+    for i in range(len(completion)): 
+          if participant[i] != completion[i]: 
+              return participant[i] 
