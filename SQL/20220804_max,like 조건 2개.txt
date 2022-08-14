@@ -1,0 +1,31 @@
+(문제)
+가장 최근에 들어온 동물은 언제 들어왔는지 조회하는 SQL 문을 작성해주세요.
+
+------------SQL문------------
+SELECT max(datetime)
+from animal_ins
+
+
+(문제)
+동물 보호소에 들어온 동물 중, 이름이 없는 채로 들어온 동물의 ID를 조회하는 SQL 문을 작성해주세요. 단, ID는 오름차순 정렬되어야 합니다.
+
+------------SQL문------------
+SELECT animal_id
+from animal_ins
+where name is null
+order by animal_id
+
+
+
+(문제)
+보호소에서 중성화 수술을 거친 동물 정보를 알아보려 합니다. 보호소에 들어올 당시에는 중성화1되지 않았지만, 보호소를 나갈 당시에는 중성화된 동물의 아이디와 생물 종, 이름을 조회하는 아이디 순으로 조회하는 SQL 문을 작성해주세요.
+------------SQL문------------
+SELECT O.animal_id,O.animal_type,name
+from animal_outs O inner join (select animal_id,SEX_UPON_INTAKE from animal_ins 
+                         where SEX_UPON_INTAKE like '%Intact%') A
+on O.animal_id=A.animal_id
+where (O.SEX_UPON_OUTCOME like '%Spayed%' or O.SEX_UPON_OUTCOME like '%Neutered%')
+
+#동물보호소에서 입양 보낸 동물의 정보를 테이블과 동물 보호소에 들어온 동물 중 중성화를 하지 않은 테이블과 inner join함.
+#그 중 입양 보낸 동물 중 중성화를 하지 않은 동물이 있을 수도 있으니 where과 같은 조건을 줌.
+
