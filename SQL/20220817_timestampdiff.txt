@@ -1,0 +1,27 @@
+(문제)
+입양을 간 동물 중, 보호 기간이 가장 길었던 동물 두 마리의 아이디와 이름을 조회하는 SQL문을 작성해주세요. 이때 결과는 보호 기간이 긴 순으로 조회해야 합니다.
+
+
+(SQL문)
+SELECT  O.animal_id,O.name
+from animal_ins I inner join animal_outs O on I.animal_id=O.animal_id
+order by abs(TIMESTAMPDIFF(DAY, I.datetime, O.datetime)) desc limit 2
+
+
+
+(참고)
+□DATEDIFF(날짜1, 날짜2)
+날짜1 - 날짜2 차이를 일수로 반환
+
+□TIMESTAMPDIFF(단위, 날짜1, 날짜2)
+날짜1 - 날짜2 차이를 선택한 단위로 반환
+
+□TIMESTAMPDIFF 단위
+SECOND : 초
+MINUTE : 분
+HOUR : 시
+DAY : 일
+WEEK : 주
+MONTH : 월
+QUARTER : 분기
+YEAR : 년
