@@ -1,0 +1,13 @@
+(문제)
+동물 보호소에 들어온 모든 동물의 아이디와 이름, 보호 시작일을 이름 순으로 조회하는 SQL문을 작성해주세요. 단, 이름이 같은 동물 중에서는 보호를 나중에 시작한 동물을 먼저 보여줘야 합니다.
+
+
+(SQL문)
+SELECT animal_id
+    ,name
+    ,min(animal_ins.DATETIME) over (order by animal_ins.DATETIME desc)
+from animal_ins
+order by name
+
+
+이름순으로 정렬한 후에 그 중 이름이 같은 것들은 보호시작일이 내림차순으로 되도록 작성
