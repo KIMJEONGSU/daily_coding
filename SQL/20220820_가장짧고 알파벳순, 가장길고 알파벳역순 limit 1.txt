@@ -13,8 +13,23 @@ from station
 order by length(city) desc limit 1
 
 
-
-
 ***셀프조인과 union으로 합치려고 했지만, union의 경우 정렬 기준이 달라서 사용불가.
 첫번째 쿼리문에 ;(세미클론)을 붙이고 두번째 쿼리문을 작성했더니, 원하는 데이터가 추출됨.
 문자열이 가장 짧고, 알파벳순으로 정렬해서 뽑은 데이터와 문자열이 가장 길고, 알파벳 역순으로 정렬해서 뽑은 데이터를 합침.
+
+
+
+(SQL문_2)
+select A.city, A.TT
+from( select city
+     , min(length(city)) over (order by city) as TT, ROW_NUMBER() over(order by length(city)) as ranking
+    from station ) A
+where A.ranking=1
+union
+select B.city,B.T
+from( select city
+     , max(length(city)) over (order by city) as T, ROW_NUMBER() over(order by length(city) desc) as ranking
+    from station limit 1 ) B
+where B.ranking=1
+
+***union을 사용하기 위해 다시 작성한 SQL문
