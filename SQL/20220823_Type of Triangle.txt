@@ -1,0 +1,99 @@
+(문제)------------------------------------------
+Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+
+Equilateral: It's a triangle with  sides of equal length.
+Isosceles: It's a triangle with  sides of equal length.
+Scalene: It's a triangle with  sides of differing lengths.
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+
+
+
+
+(SQL문_잘못된 코드)------------------------------------------
+select 
+    case 
+        when A in (select A
+                    from TRIANGLES
+                    where A=B and A=C) then 'Equilateral' 
+        when A in (select A
+                    from TRIANGLES
+                    where A=B and B!=C) then 'Isosceles'
+        when A in (select A
+                    from TRIANGLES
+                    where A!=B and B=C) then 'Isosceles'            
+        else 
+            case 
+                when A+B<C then ' Not A Triangle'
+                when A+C<B then ' Not A Triangle'
+                when B+C<A then ' Not A Triangle'
+                else 'Scalene' 
+            end
+    end 
+from TRIANGLES
+
+=>case문에서 when다음에는 조건식 1개만 되는줄알고 in사용.
+=>in의 경우 
+=>when순서대로 실행되는데 순서가 잘못되서 오류가 난것.
+
+
+(SQL문_고친 코드)------------------------------------------
+select 
+    case 
+        when A+B<=C OR A+C<=B OR B+C<=A then ' Not A Triangle'
+        when A IN (select A
+                    from TRIANGLES
+                    where A=B and A=C) then 'Equilateral' 
+        when  A=B OR B=C OR A=C then 'Isosceles'      
+        else 'Scalene' end
+    end 
+from TRIANGLES
+
+=>처음에 아래와 같은 코드를 작성했었는데 
+ when A IN (select A
+                    from TRIANGLES
+                    where A=B OR B=C OR A=C) then 'Isosceles'  
+
+
+(SQL문_다른 사람의 코드)------------------------------------------
+SELECT 
+    CASE 
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN A+B <= C OR A+C <= B OR B+C <= A THEN 'Not A Triangle'
+        WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+        ELSE 'Scalene' END
+FROM TRIANGLES 
+
+
+Equilateral
+Equilateral
+Isosceles
+Equilateral
+Isosceles
+Equilateral
+Scalene
+Not A Triangle
+Scalene
+Scalene
+Scalene
+Not A Triangle
+Not A Triangle
+Scalene
+Equilateral
+------------------------
+Equilateral
+Equilateral
+Isosceles
+Equilateral
+Isosceles
+Equilateral
+Isosceles
+Not A Triangle
+Isosceles
+Isosceles
+Scalene
+Not A Triangle
+Not A Triangle
+Scalene
+Equilateral
+
+
