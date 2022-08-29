@@ -1,0 +1,50 @@
+(문제)
+Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). For example: AnActorName(A), ADoctorName(D), AProfessorName(P), and ASingerName(S).
+Query the number of ocurrences of each occupation in OCCUPATIONS. Sort the occurrences in ascending order, and output them in the following format:
+
+-------------------------------------------------------------------------------
+(SQL문)
+select concat(name,'(',substr(OCCUPATION,1,1),')')
+from OCCUPATIONS
+order by name asc;
+union
+select concat('There','are','a','total','of',count(occupation),occupation)
+from OCCUPATIONS
+-------------------------------------------------------------------------------
+(SQL문 2)
+먼저 이름과 직업의 첫글자만 출력.
+SELECT CONCAT(NAME,'(',substr(occupation, 1.1),')') as a
+FROM OCCUPATIONS 
+ORDER BY NAME;
+
+=>(오류)SQL0440N No authorized routine named "CONCAT" of type "FUNCTION" having compatible arguments was found. SQLSTATE=42884
+
+SELECT CONCAT(NAME, CONCAT(CONCAT('(', LEFT(Occupation,1)), ')'))
+FROM OCCUPATIONS;
+order by name;
+
+=>이름과 직업의 첫글자만 출력하면 쿼리문이 실행되지만, ()를 합치는 순간 concat 오류가 났기때문에 '('와 ')'를 따로 concat함.
+
+SELECT CONCAT(NAME, CONCAT(CONCAT('(', LEFT(Occupation,1)), ')'))
+FROM OCCUPATIONS
+order by name;
+
+SELECT CONCAT('There are a total of '
+	,concat(COUNT(OCCUPATION)
+	,concat(' ',concat(LOWER(OCCUPATION),'s.'))))
+FROM OCCUPATIONS
+GROUP BY OCCUPATION
+ORDER BY COUNT(OCCUPATION), OCCUPATION;
+---------------------------------------------------------------------------------------
+(참고)
+mysql에서 문자열에 일부분을 가져오는 함수 3가지
+left:문자에 왼쪽을 기준으로 일정 갯수를 가져오는 함수
+=>LEFT(문자, 가져올 갯수);
+
+mid:문자에 지정한 시작위치를 기준으로 일정 갯수를 가져오는 함수==SUBSTR과 SUBSTRING 함수의 동의어
+=>MID(문자, 시작 위치, 가져올 갯수);
+=>또는 SUBSTR(문자, 시작 위치, 가져올 갯수);
+=>또는 SUBSTRING(문자, 시작 위치, 가져올 갯수);
+
+right:문자에 오른쪽을 기준으로 일정 갯수를 가져오는 함수
+RIGHT(문자, 가져올 갯수);
